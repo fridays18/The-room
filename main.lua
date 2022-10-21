@@ -5,6 +5,7 @@
 --add hot key combat and abils
 
 --test
+--replit test
 function love.load()
 --timer require
 Timer = require 'humptimer'
