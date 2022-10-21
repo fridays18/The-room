@@ -3,6 +3,8 @@
 --Bug reports
 --audio https://tabletopaudio.com
 --add hot key combat and abils
+
+--test
 function love.load()
 --timer require
 Timer = require 'humptimer'
