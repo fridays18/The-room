@@ -7,7 +7,7 @@ function love.load()
 --timer require
 Timer = require 'humptimer'
 
---replit testing
+--atom testing
 
 --spite setup
 player = {x = 10, y = 10, w = 10, h = 10,health = 100, damage = 10}
