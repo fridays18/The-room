@@ -11,7 +11,7 @@ Timer = require 'humptimer'
 player = {x = 10, y = 10, w = 10, h = 10,health = 100, damage = 10}
 enemy = {x = 30, y = 30, w = 10, h = 10,health = 20,damage = 5}
 exit = {x = 165, y = 50, w = 10, h = 20}
-    
+
 --image import
 background_main = love.graphics.newImage("main.png")
 player_art = love.graphics.newImage("player_warrior.png")
@@ -111,7 +111,7 @@ if exit_collide == true then
         level_end = true
         move = false
     end
-    
+
 if battleSeq == true then
 battle = true
 move = false
@@ -199,7 +199,7 @@ else
 end
 end
 
---key press function that runs once rather than a constant 
+--key press function that runs once rather than a constant
 function love.keypressed(key)
 if intro == true then
 if key == "space" then
@@ -249,7 +249,7 @@ if level_end == true then
             end
         end
     end
-        
+
 if battle == true then
 if key == "d" or key == "right" then
 				if selected == 0 then
@@ -299,7 +299,7 @@ end
 				end
 			end
 
-						
+
 			enemy_attack = math.random(1,enemy.damage)
 			player.health = player.health - enemy_attack
         end
