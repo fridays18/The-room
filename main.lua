@@ -1,7 +1,7 @@
 --Things to add
 --Update log
 --Bug reports
---audio https://tabletopaudio.com
+--Music by Juhani Junkala
 --add hot key combat and abils
 function love.load()
 --timer require
@@ -31,7 +31,13 @@ boarder = love.graphics.newImage("boarder.png")
 
 --audio setup
 sounds = {}
-sounds.background_audio = love.audio.newSource("background_audio.mp3", "stream")
+sounds.background_audio = love.audio.newSource("background-audio-3.wav", "stream")
+sounds.attack_effect = love.audio.newSource("attack.wav", "static")
+sounds.pickup_sound = love.audio.newSource("pickup.wav", "static")
+
+sounds.background_audio:setVolume(0.2)
+sounds.attack_effect:setVolume(1.5)
+sounds.pickup_sound:setVolume(1.5)
 
 sounds.background_audio:play()
 
@@ -67,6 +73,13 @@ function love.update(dt)
 --setting timer
 Timer.update(dt)
 --loop bg audio
+if not sounds.background_audio:isPlaying( ) then
+		love.audio.play(sounds.background_audio)
+	end
+
+if battle == false then
+selected = 1
+end
 --while battling if health is less than 0 do stuff
 if battle == true then
 if player.health <= 0 then
@@ -99,8 +112,9 @@ if pickup == false then
     end
 
 if item_collide == true then
-pickup = false
+pickup = true
 item_collide = false
+sounds.pickup_sound:play()
 if pickup_choice == 1 then
 			potions = potions + 1
 		elseif pickup_choice == 2 then
@@ -131,6 +145,15 @@ function love.draw()
           end
       end
 
+if player_alive == true then
+if pickup == false then
+if battle == false then
+if enemy_alive == false then
+love.graphics.print("Chase your loot!",20,201)
+end
+end
+end
+end
     if intro == true then
         love.graphics.print("The room",60,50)
         love.graphics.print("Press space",45,100)
@@ -156,9 +179,10 @@ function love.draw()
 				elseif pickup_choice == 2 then
 					love.graphics.draw(spellBook, enemy.x,enemy.y)
 				end
-
+    if player_alive == true then
     --love.graphics.rectangle("line",exit.x,exit.y,exit.w,exit.h)
     love.graphics.draw(door,exit.x,exit.y)
+  end
     end
     if player_alive == true then
     --love.graphics.rectangle("fill",player.x,player.y,player.w,player.h)
@@ -253,6 +277,7 @@ if level_end == true then
     end
 
 if battle == true then
+  if enemy.health > 0 then
 if key == "d" or key == "right" then
 				if selected == 0 then
 					selected = 1
@@ -270,9 +295,11 @@ elseif key == "a" or key == "left" then
 					end
 				end
 end
+end
 if buff ~= true then buff = false end
 if key == "space" then
 if selected == 1 then
+sounds.attack_effect:play()
 if buff == true then
 player_attack = math.random(1,player.damage + 10)
 enemy.health = enemy.health - player_attack
