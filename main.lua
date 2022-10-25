@@ -1,15 +1,20 @@
 --Things to add
---Update log
---Bug reports
+--add story
+--add setting for audio(sound effects and music with disclaimer abt replit),window size, difficulty
+--add backpack
 --Music by Juhani Junkala
---add hot key combat and abils
+
+--load()
 function love.load()
 --timer require
 Timer = require 'humptimer'
-
---atom testing
-
---spite setup
+	
+--setting screen settings
+love.window.setTitle("The room")
+screenx = 200
+screeny = 220
+love.window.setMode(screenx, screeny)
+--sprite setup
 player = {x = 10, y = 10, w = 10, h = 10,health = 100, damage = 10}
 enemy = {x = 30, y = 30, w = 10, h = 10,health = 20,damage = 5}
 exit = {x = 165, y = 50, w = 10, h = 20}
@@ -21,7 +26,7 @@ enemy_art = love.graphics.newImage("skelly.png")
 door = love.graphics.newImage("door.png")
 arrow = love.graphics.newImage("arrow.png")
 slash = love.graphics.newImage("slash.png")
-hotbar_art = love.graphics.newImage("hotbar.png")
+hotbar_art = love.graphics.newImage("hotbarV2.png")
 spellBook = love.graphics.newImage("spellBook.png")
 healthPotion = love.graphics.newImage("healthPotion.png")
 healthPotGui = love.graphics.newImage("healthPotGui.png")
@@ -30,26 +35,22 @@ SpellGui = love.graphics.newImage("SpellGui.png")
 boarder = love.graphics.newImage("boarder.png")
 
 --audio setup
+--audio table
 sounds = {}
+--audio import
 sounds.background_audio = love.audio.newSource("background-audio-3.wav", "stream")
 sounds.attack_effect = love.audio.newSource("attack.wav", "static")
 sounds.pickup_sound = love.audio.newSource("pickup.wav", "static")
-
+--volume setting
 sounds.background_audio:setVolume(0.2)
 sounds.attack_effect:setVolume(1.5)
 sounds.pickup_sound:setVolume(1.5)
-
+--playing bg audio
 sounds.background_audio:play()
 
 --font import and setup
 font = love.graphics.newFont("main_font.ttf", 15)
 love.graphics.setFont(font)
-
---setting screen settings
-love.window.setTitle("The room")
-screenx = 200
-screeny = 220
-love.window.setMode(screenx, screeny)
 
 --setting default variables
 player_alive = true
@@ -69,6 +70,7 @@ selected = 1
 
 end
 
+--update()
 function love.update(dt)
 --setting timer
 Timer.update(dt)
@@ -76,7 +78,7 @@ Timer.update(dt)
 if not sounds.background_audio:isPlaying( ) then
 		love.audio.play(sounds.background_audio)
 	end
-
+--if not in battle set selected move to 1(sword)
 if battle == false then
 selected = 1
 end
@@ -110,7 +112,8 @@ if enemy_alive == false then
 if pickup == false then
         item_collide = detectCollision(player.x,enemy.x,player.y,enemy.y,10)
     end
-
+	
+--what happens once collisions occur
 if item_collide == true then
 pickup = true
 item_collide = false
@@ -122,7 +125,6 @@ if pickup_choice == 1 then
 		end
 		pickup_choice = 0
 	end
---what happens once collisions occur
 if exit_collide == true then
         level_end = true
         move = false
@@ -136,7 +138,7 @@ end
 end
 
 
-
+--draw()
 function love.draw()
     --draw background
     for i = 0, love.graphics.getWidth() / background_main:getWidth() do
@@ -144,7 +146,7 @@ function love.draw()
               love.graphics.draw(background_main, i * background_main:getWidth(), j * background_main:getHeight())
           end
       end
-
+--loot chasing text system
 if player_alive == true then
 if pickup == false then
 if battle == false then
@@ -154,17 +156,20 @@ end
 end
 end
 end
+	--intro text
     if intro == true then
         love.graphics.print("The room",60,50)
         love.graphics.print("Press space",45,100)
     end
+	--main text
     if index == true then
+		--if dead text
     if player_alive == false then
         love.graphics.print("You died at level",26,50)
         love.graphics.print(level,100,80)
         love.graphics.print("Press space",46,100)
     end
-    --at the end of level art
+    --at the end of level art and text
     if level_end == true then
         love.graphics.print("You are at level",28,50)
         love.graphics.print(level,100,80)
@@ -180,16 +185,16 @@ end
 					love.graphics.draw(spellBook, enemy.x,enemy.y)
 				end
     if player_alive == true then
-    --love.graphics.rectangle("line",exit.x,exit.y,exit.w,exit.h)
+    --drawing the door
     love.graphics.draw(door,exit.x,exit.y)
   end
     end
+			--drawing player
     if player_alive == true then
-    --love.graphics.rectangle("fill",player.x,player.y,player.w,player.h)
     love.graphics.draw(player_art,player.x,player.y)
     end
+			--drawing enemy
     if enemy_alive == true then
-    --love.graphics.rectangle("line",enemy.x,enemy.y,enemy.w,enemy.h)
     love.graphics.draw(enemy_art,enemy.x,enemy.y)
     end
     --battle text
